@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+<style>
+font {
+	size:-webkit-text-size-adjust: none;
+}
+body {
+    background-color: black;
+	font-size: -webkit-text-size-adjust: none;
+}
+p {
+	font-family: "Courier New", Courier, monospace;
+}
+td {
+	font-family: "Courier New", Courier, monospace;
+	font-size: -webkit-text-size-adjust: none;
+}
+</style>
+<script>
+function update()
+{
+	var today = new Date();
+	var h = today.getUTCHours();
+	var m = today.getUTCMinutes();
+	var s = today.getUTCSeconds();
+	
+	var countdownColumn = 0;
+	var guildColumn = 1;
+	var nameColumn = 2;
+	var timeColumn = 3;
+    
+	var lookupTable = 
+	{
+		"G +15": "6:00",
+
+		"G +14.45": "6:15",
+		"G +14.40": "6:30",
+		"G +14.15": "6:45",
+		"G +14": "7:00",
+
+		"G +13.45": "7:15",
+		"G +13.30": "7:30",
+		"G +13.15": "7:45",
+		"G +13": "8:00",
+		
+		"G +12.45": "8:15",
+		"G +12.30": "8:30",
+		"G +12.15": "8:45",
+		"G +12": "9:00",
+
+		"G +11.45": "9:15",
+		"G +11.30": "9:30",
+		"G +11.15": "9:45",
+		"G +11": "10:00",
+
+		"G +10.45": "10:15",
+		"G +10.30": "10:30",
+		"G +10.15": "10:45",
+		"G +10": "11:00",
+
+		"G +9.45": "11:15",
+		"G +9.30": "11:30",
+		"G +9.15": "11:45",
+		"G +9": "12:00",
+
+		"G +8.45": "12:15",
+		"G +8.30": "12:30",
+		"G +8.15": "12:45",
+		"G +8": "13:00",
+
+		"G +7.45": "13:15",
+		"G +7.30": "13:30",
+		"G +7.15": "13:45",
+		"G +7": "14:00",
+
+		"G +6.45": "14:15",
+		"G +6.30": "14:30",
+		"G +6.15": "14:45",
+		"G +6": "15:00",
+
+		"G +5.45": "15:15",
+		"G +5.30": "15:30",
+		"G +5.15": "15:45",
+		"G +5": "16:00",
+
+		"G +4.45": "16:15",
+		"G +4.30": "16:30",
+		"G +4.15": "16.45",
+		"G +4": "17:00",
+
+		"G +3.45": "17:15",
+		"G +3.30": "17:30",
+		"G +3.15": "17:45",
+		"G +3": "18:00",
+
+		"G +2.45": "18:15",
+		"G +2.30": "18:30",
+		"G +2.15": "18:45",
+		"G +2": "19:00",
+
+		"G +1.45": "19:15",
+		"G +1.30": "19:30",
+		"G +1.15": "19:45",
+		"G +1": "20:00",
+
+		"G +0.45": "20:15",
+		"G +0.30": "20:30",
+		"G +0.15": "20:45",
+
+		"G 0": "21:00",
+
+		"G -0.15": "21:15",
+		"G -0.30": "21:30",
+		"G -0.45": "21:45",
+
+		"G -1": "22:00",
+		"G -1.15": "22:45",
+		"G -1.30": "22:30",
+		"G -1.45": "22:15",
+
+		"G -2": "23:00",
+		"G -2.15": "23:45",
+		"G -2.30": "23:30",
+		"G -2.45": "23:15",
+
+		"G -3": "0:00",
+		"G -3.15": "0:45",
+		"G -3.30": "0:30",
+		"G -3.45": "0:15",
+
+		"G -4": "1:00",
+		"G -4.15": "1:45",
+		"G -4.30": "1:30",
+		"G -4.45": "1:15",
+
+		"G -5": "2:00",
+		"G -5.15": "2:45",
+		"G -5.30": "2:30",
+		"G -5.45": "2:15",
+
+		"G -6": "3:00",
+		"G -6.15": "3:45",
+		"G -6.30": "3:30",
+		"G -6.45": "3:15",
+
+		"G -7": "4:00",
+		"G -7.15": "4:45",
+		"G -7.30": "4:30",
+		"G -7.45": "4:15",
+
+		"G -8": "5:00",
+		"G -8.15": "5:45",
+		"G -8.30": "5:30",
+		"G -8.45": "5:15",
+
+		"G -9": "6:00",
+		"G -9.15": "6:45",
+		"G -9.30": "6:30",
+		"G -9.45": "6:15",
+
+		"G -10": "7:00",
+		"G -10.15": "7:45",
+		"G -10.30": "7:30",
+		"G -10.45": "7:15",
+
+		"G -11": "8:00",
+		"G -11.15": "8:45",
+		"G -11.30": "8:30",
+		"G -11.45": "8:15",
+
+		"G -12": "9:00",
+		"G -12.15": "9:45",
+		"G -12.30": "9:30",
+		"G -12.45": "9:15",
+
+		"G -13": "10:00",
+		"G -13.15": "10:45",
+		"G -13.30": "10:30",
+		"G -13.45": "10:15",
+
+		"G -14": "11:00",
+		"G -14.15": "11:45",
+		"G -14.30": "11:30",
+		"G -14.45": "11:15",
+
+		"G -15": "12:00",
+	}
+
+    {
+        var oTable = document.getElementById('myTable');
+		
+		//calculate offset
+		{
+			var unknownTime = "unknown";
+			var rowLength = oTable.rows.length;
+
+			for (i = 0; i < rowLength; i++)
+			{
+				var thisCell = oTable.rows.item(i).cells;
+				
+				if(thisCell.item(timeColumn).innerHTML == unknownTime)
+				{
+					thisCell.item(countdownColumn).innerHTML = "99:00:00";
+				}
+				else
+				{
+					var thisTime = thisCell.item(timeColumn).innerHTML;
+					var firstCharacter = thisTime.substring(0, 1);
+					
+					if(firstCharacter == "G")
+					{
+						thisTime = lookupTable[thisTime];
+					}
+
+					var thisResult = thisTime.split(":");
+					
+					var dayInSeconds = 24 * 60 * 60;
+					var utcInSeconds = (h * 60 * 60) + (m * 60) + s;
+					var rwInSeconds = (parseInt(thisResult[0]) * 60 * 60) + (parseInt(thisResult[1]) * 60);
+
+					var secondsTillReward = rwInSeconds - utcInSeconds;
+					
+					if(secondsTillReward < 0)
+					{
+						secondsTillReward = secondsTillReward + dayInSeconds;
+					}
+					
+					var hourCount = Math.floor((secondsTillReward / 60) / 60);
+					var minuteCount = Math.floor((secondsTillReward - (hourCount * 60 * 60)) / 60);
+					var secondCount = secondsTillReward - ((hourCount * 60 * 60) + (minuteCount * 60));
+					
+					thisCell.item(countdownColumn).innerHTML = hourCount + ":" + checkTime(minuteCount) + ":" + checkTime(secondCount);				
+				}
+			}
+		}
+		
+		//colour cells
+		{
+			var rowLength = oTable.rows.length;
+
+			for (i = 0; i < rowLength; i++)
+			{
+				var thisCell = oTable.rows.item(i).cells;
+
+				var thisResult = thisCell.item(countdownColumn).innerHTML.split(":");
+				
+				if(parseInt(thisResult[0]) == 0 || (parseInt(thisResult[0]) == 23 && parseInt(thisResult[1]) > 57))
+				{
+                    thisCell.item(timeColumn).style.color = "black";
+					thisCell.item(guildColumn).style.color = "red";
+                    thisCell.item(nameColumn).style.color = "red";
+					thisCell.item(countdownColumn).style.color = "red";
+				}
+				else if(parseInt(thisResult[0]) == 1)
+				{
+                    thisCell.item(timeColumn).style.color = "black";
+					thisCell.item(guildColumn).style.color = "orange";
+                    thisCell.item(nameColumn).style.color = "orange";
+                    thisCell.item(countdownColumn).style.color = "orange";
+				}
+				else if(parseInt(thisResult[0]) == 2)
+				{
+                    thisCell.item(timeColumn).style.color = "black";
+					thisCell.item(guildColumn).style.color = "yellow";
+                    thisCell.item(nameColumn).style.color = "yellow";
+                    thisCell.item(countdownColumn).style.color = "yellow";
+				}
+				else
+				{
+                    thisCell.item(timeColumn).style.color = "black";
+					thisCell.item(guildColumn).style.color = "white";
+                    thisCell.item(nameColumn).style.color = "white";
+                    thisCell.item(countdownColumn).style.color = "white";
+				}
+			}
+		}
+
+		//sort
+		{
+			var done = false;
+			
+			while(done == false)
+			{
+				done = true;
+			
+				var rowLength = oTable.rows.length;
+
+				for (i = 0; i < rowLength - 1; i++)
+				{
+					var firstCell = oTable.rows.item(i).cells;
+					var secondCell = oTable.rows.item(i + 1).cells;
+					
+					var firstValues = firstCell.item(countdownColumn).innerHTML.split(":");
+					var secondValues = secondCell.item(countdownColumn).innerHTML.split(":");
+                    
+                    var firstHour = parseInt(firstValues[0]);
+                    var firstMinute = parseInt(firstValues[1]);
+
+                    var secondHour = parseInt(secondValues[0]);
+                    var secondMinute = parseInt(secondValues[1]);
+                    
+                    if(firstHour == 23 && firstMinute > 57)
+                    {
+                        firstHour = firstHour - 24;
+                    }
+                    
+                    if(secondHour == 23 && secondMinute > 57)
+                    {
+                        secondHour = secondHour - 24;
+                    }
+
+					if(firstHour > secondHour || (parseInt(firstValues[0]) == parseInt(secondValues[0]) && parseInt(firstValues[1]) > parseInt(secondValues[1])))
+					{
+						var tempTime = firstCell.item(timeColumn).innerHTML;
+						var tempGuild = firstCell.item(guildColumn).innerHTML;
+						var tempName = firstCell.item(nameColumn).innerHTML;
+						var tempOffset = firstCell.item(countdownColumn).innerHTML;
+						
+						firstCell.item(timeColumn).innerHTML = secondCell.item(timeColumn).innerHTML;
+						firstCell.item(guildColumn).innerHTML = secondCell.item(guildColumn).innerHTML;
+						firstCell.item(nameColumn).innerHTML = secondCell.item(nameColumn).innerHTML;
+						firstCell.item(countdownColumn).innerHTML = secondCell.item(countdownColumn).innerHTML;
+
+						secondCell.item(timeColumn).innerHTML = tempTime;
+						secondCell.item(guildColumn).innerHTML = tempGuild;
+						secondCell.item(nameColumn).innerHTML = tempName;
+						secondCell.item(countdownColumn).innerHTML = tempOffset;
+						
+						done = false;
+					}
+				}
+			}
+		}
+    }
+	
+	{
+        m = checkTime(m);
+        s = checkTime(s);
+        document.getElementById('txt').innerHTML =
+        "Current Time: " + h + ":" + m + ":" + s;
+    }
+    
+    var t = setTimeout(update, 500);
+}
+function checkTime(i) {
+    if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+    return i;
+}
+</script>
+</head>
+
+<body onload="update()">
+
+
+<p>
+<font color="red">Wind and Bush Reward Times</font><br/>
+</p>
+
+<p>
+<font size="2" color="red">Critical, do not attack!</font><br/>
+<font size="2" color="orange">Climbing, avoid where possible</font><br/>
+<font size="2" color="yellow">Waiting, attack if needed</font><br/>
+<font size="2" color="white">Inactive, fine to attack</font><br/>
+</p>
+
+<p><div id="txt"></div></p>
+
+<table id="myTable">
+	<tr>
+        <td>uninitialised</td>
+        <td>[WnB]</td>
+        <td>What</td>
+        <td>G +4.30</td>
+    </tr>
+	<tr>
+        <td>uninitialised</td>
+        <td>[WnB]</td>
+        <td>the</td>
+        <td>G +2</td>
+    </tr>
+	<tr>
+        <td>uninitialised</td>
+        <td>[WnB]</td>
+        <td>WnB</td>
+        <td>G +1</td>
+    </tr>
+	<tr>
+        <td>uninitialised</td>
+        <td>[WnB]</td>
+        <td>is</td>
+        <td>G 0</td>
+    </tr>
+	<tr>
+        <td>uninitialised</td>
+        <td>[WnB]</td>
+        <td>this</td>
+        <td>G -2</td>
+    </tr>
+	<tr>
+        <td>uninitialised</td>
+        <td>[WnB]</td>
+        <td>site!</td>
+        <td>G -3.15</td>
+    </tr>
+</table>
+
+</body>
+</html>
